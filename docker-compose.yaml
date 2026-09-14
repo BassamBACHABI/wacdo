@@ -1,0 +1,34 @@
+services:
+
+  mysql:
+    image: mysql:8.0
+    container_name: wacdo-mysql
+    cap_add:
+      - SYS_NICE
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: wacdo_db
+      MYSQL_USER: wacdo
+      MYSQL_PASSWORD: wacdo
+      TZ: Europe/Paris
+    restart: unless-stopped
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: wacdo-phpmyadmin
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      TZ: Europe/Paris
+    depends_on:
+      - mysql
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
