@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<!--
+  Gabarit commun à toutes les pages.
+  Usage dans une page :
+    <html th:replace="~{base :: page('Titre de la page', ~{::contenu}, true)}">
+  Le dernier paramètre affiche (true) ou masque (false) la barre de navigation.
+-->
+<html lang="fr" xmlns:th="http://www.thymeleaf.org" th:fragment="page(titre, contenu, avecNav)">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:text="${titre} + ' · Wacdo'">Wacdo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-100 min-h-screen flex flex-col">
+
+<th:block th:if="${avecNav}">
+  <nav th:replace="~{nav :: nav}"></nav>
+</th:block>
+
+<main class="flex-1 w-full max-w-5xl mx-auto px-4 py-10 flex flex-col">
+  <th:block th:replace="${contenu}"></th:block>
+</main>
+
+<footer class="border-t border-slate-200 bg-white">
+  <div class="max-w-5xl mx-auto px-4 py-4 text-xs text-slate-500">
+    Wacdo — Système de gestion des restaurants
+  </div>
+</footer>
+
+</body>
+</html>

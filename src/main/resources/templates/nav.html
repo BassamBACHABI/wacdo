@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<!-- Barre de navigation. Usage : th:replace="~{nav :: nav}" -->
+<nav th:fragment="nav" class="bg-slate-900 text-slate-200">
+  <div class="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
+
+    <a th:href="@{/}" class="flex items-center gap-2 font-bold text-white">
+      <span class="inline-flex items-center justify-center h-7 w-7 rounded bg-amber-500 text-slate-900">W</span>
+      <span>Wacdo</span>
+    </a>
+
+    <div class="flex items-center gap-1">
+      <a th:href="@{/restaurants}"
+         class="px-3 py-2 rounded-md text-sm font-medium hover:bg-slate-800 hover:text-white">
+        Restaurants
+      </a>
+      <a th:href="@{/collaborateur}"
+         class="px-3 py-2 rounded-md text-sm font-medium hover:bg-slate-800 hover:text-white">
+        Collaborateurs
+      </a>
+      <a th:href="@{/affectations}"
+         class="px-3 py-2 rounded-md text-sm font-medium hover:bg-slate-800 hover:text-white">
+        Affectations
+      </a>
+      <a th:href="@{/fonctions}"
+         class="px-3 py-2 rounded-md text-sm font-medium hover:bg-slate-800 hover:text-white">
+        Fonctions
+      </a>
+
+      <form th:action="@{/logout}" method="post" class="ml-2">
+        <button type="submit"
+                class="px-3 py-2 rounded-md text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-white">
+          Déconnexion
+        </button>
+      </form>
+    </div>
+
+  </div>
+</nav>
+
+</body>
+</html>
