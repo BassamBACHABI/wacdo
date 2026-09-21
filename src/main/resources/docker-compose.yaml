@@ -35,9 +35,9 @@ services:
     container_name: smtp4dev-oauth2
     restart: always
     ports:
-      - "5000:80"      # Web UI
+      - "8082:80"      # Web UI
       - "2525:25"      # SMTP server
-      - "1143:143"     # IMAP server
+      - "8083:143"     # IMAP server
 
 volumes:
   mysql_data:

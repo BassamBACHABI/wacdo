@@ -1,18 +1,46 @@
 <!DOCTYPE html>
-<html lang="fr" xmlns:th="http://www.thymeleaf.org">
-<head>
-  <meta charset="UTF-8">
-  <title>Restaurants</title>
-</head>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{base :: page('Restaurants', ~{::contenu}, true)}">
 <body>
 
-<h1>Liste des restaurantssss</h1>
+<div th:fragment="contenu">
 
-<ul>
-  <li th:each="restaurant : ${restaurants}">
-    <span th:text="${restaurant.nom}"></span>
-  </li>
-</ul>
+  <div class="flex items-end justify-between mb-6">
+    <div>
+      <h1 class="text-2xl font-bold text-slate-800 mb-1">Restaurants</h1>
+      <p class="text-sm text-slate-500">
+        <span th:text="${#lists.size(restaurants)}">0</span> restaurant(s) enregistré(s).
+      </p>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-lg shadow overflow-hidden">
+    <table class="min-w-full divide-y divide-slate-200">
+      <thead class="bg-slate-50">
+      <tr>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Nom</th>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Adresse</th>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Code postal</th>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Ville</th>
+      </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-200">
+      <tr th:each="restaurant : ${restaurants}" class="hover:bg-slate-50">
+        <td class="px-6 py-4 text-sm font-medium text-slate-800" th:text="${restaurant.nom}">—</td>
+        <td class="px-6 py-4 text-sm text-slate-600" th:text="${restaurant.adresse}">—</td>
+        <td class="px-6 py-4 text-sm text-slate-600" th:text="${restaurant.codePostal}">—</td>
+        <td class="px-6 py-4 text-sm text-slate-600" th:text="${restaurant.ville}">—</td>
+      </tr>
+      <tr th:if="${#lists.isEmpty(restaurants)}">
+        <td colspan="4" class="px-6 py-10 text-center text-sm text-slate-500">
+          Aucun restaurant enregistré.
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
 
 </body>
 </html>
