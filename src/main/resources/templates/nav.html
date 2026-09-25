@@ -1,7 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <body>
-
 <!-- Barre de navigation. Usage : th:replace="~{nav :: nav}" -->
 <nav th:fragment="nav" class="bg-slate-900 text-slate-200">
   <div class="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
@@ -16,7 +14,7 @@
          class="px-3 py-2 rounded-md text-sm font-medium hover:bg-slate-800 hover:text-white">
         Restaurants
       </a>
-      <a th:href="@{/collaborateur}"
+      <a th:href="@{/collaborateurs}"
          class="px-3 py-2 rounded-md text-sm font-medium hover:bg-slate-800 hover:text-white">
         Collaborateurs
       </a>
