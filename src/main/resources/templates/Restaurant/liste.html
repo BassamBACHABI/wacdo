@@ -11,6 +11,12 @@
         <span th:text="${#lists.size(restaurants)}">0</span> restaurant(s) enregistré(s).
       </p>
     </div>
+    <a th:href="@{/restaurants/create}"
+       class="px-4 py-2 rounded-md bg-amber-600 text-white text-sm font-medium
+              hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-amber-500
+              focus:ring-offset-2">
+      Nouveau restaurant
+    </a>
   </div>
 
   <div class="bg-white rounded-lg shadow overflow-hidden">
@@ -21,6 +27,7 @@
         <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Adresse</th>
         <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Code postal</th>
         <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Ville</th>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Actions</th>
       </tr>
       </thead>
       <tbody class="divide-y divide-slate-200">
@@ -29,6 +36,19 @@
         <td class="px-6 py-4 text-sm text-slate-600" th:text="${restaurant.adresse}">—</td>
         <td class="px-6 py-4 text-sm text-slate-600" th:text="${restaurant.codePostal}">—</td>
         <td class="px-6 py-4 text-sm text-slate-600" th:text="${restaurant.ville}">—</td>
+        <td class="px-6 py-4 text-sm text-right">
+          <a th:href="@{/restaurants/update/{id}(id=${restaurant.id})}"
+             class="font-medium text-amber-600 hover:text-amber-700 hover:underline">Modifier</a>
+          <form th:action="@{/restaurants/delete/{id}(id=${restaurant.id})}"
+                method="post"
+                style="display: inline;"
+                onsubmit="return confirm('Supprimer ce restaurant ?')">
+            <button type="submit"
+                    class="px-3 py-2 rounded-md bg-red-600 text-white hover:bg-red-700">
+              Supprimer
+            </button>
+          </form>
+        </td>
       </tr>
       <tr th:if="${#lists.isEmpty(restaurants)}">
         <td colspan="4" class="px-6 py-10 text-center text-sm text-slate-500">

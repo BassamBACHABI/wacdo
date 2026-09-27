@@ -18,4 +18,19 @@ public class RestaurantService {
   public List<Restaurant> getAll() {
     return restaurantRepository.findAll();
   }
+  public void saveRestaurant(Restaurant restaurant) {
+    restaurantRepository.save(restaurant);
+  }
+
+  public Restaurant getRestaurantById(Long id) {
+    return restaurantRepository.findById(id).orElse(null);
+  }
+
+  public void deleteRestaurant(Long id) {
+    restaurantRepository.deleteById(id);
+  }
+
+  public void updateRestaurant(Restaurant restaurant) {
+    restaurantRepository.save(restaurant);
+  }
 }

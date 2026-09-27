@@ -17,6 +17,10 @@ public class Restaurant {
   private int codePostal;
   private String ville;
 
-  @OneToMany(mappedBy = "restaurant")
+  @OneToMany(
+    mappedBy = "restaurant",
+    cascade = CascadeType.ALL,
+    orphanRemoval = true
+  )
   List<Affectation> affectations = new ArrayList<>();
 }

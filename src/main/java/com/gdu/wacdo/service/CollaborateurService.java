@@ -41,8 +41,7 @@ public class CollaborateurService {
   }
 
   public void deleteById(Long id) {
-    Collaborateur collaborateur = this.collaborateurRepository.findById(id).orElseThrow();
-    this.collaborateurRepository.delete(collaborateur);
+    this.collaborateurRepository.deleteById(id);
   }
 
 }
