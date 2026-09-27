@@ -20,6 +20,10 @@ public class Collaborateur {
   private Boolean admin;
   private String password;
 
-  @OneToMany(mappedBy = "collaborateur")
+  @OneToMany(
+    mappedBy = "collaborateur",
+    cascade = CascadeType.ALL,
+    orphanRemoval = true
+  )
   List<Affectation> affectations = new ArrayList<>();
 }

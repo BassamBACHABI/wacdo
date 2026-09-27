@@ -47,4 +47,10 @@ public class CollaborateurController {
     this.collaborateurService.update(collaborateur);
     return "redirect:/collaborateurs";
   }
+
+  @PostMapping("/delete/{id}")
+  public String delete(@PathVariable Long id) {
+    this.collaborateurService.deleteById(id);
+    return "redirect:/collaborateurs";
+  }
 }

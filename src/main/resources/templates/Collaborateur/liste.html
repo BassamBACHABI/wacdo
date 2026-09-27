@@ -45,6 +45,15 @@
         <td class="px-6 py-4 text-sm text-right">
           <a th:href="@{/collaborateurs/update/{id}(id=${collaborateur.id})}"
              class="font-medium text-amber-600 hover:text-amber-700 hover:underline">Modifier</a>
+          <form th:action="@{/collaborateurs/delete/{id}(id=${collaborateur.id})}"
+                method="post"
+                style="display: inline;"
+                onsubmit="return confirm('Supprimer ce collaborateur ?')">
+            <button type="submit"
+                    class="px-3 py-2 rounded-md bg-red-600 text-white hover:bg-red-700">
+              Supprimer
+            </button>
+          </form>
         </td>
       </tr>
       <tr th:if="${#lists.isEmpty(collaborateurs)}">

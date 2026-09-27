@@ -40,4 +40,9 @@ public class CollaborateurService {
     return this.collaborateurRepository.findById(id).orElse(null);
   }
 
+  public void deleteById(Long id) {
+    Collaborateur collaborateur = this.collaborateurRepository.findById(id).orElseThrow();
+    this.collaborateurRepository.delete(collaborateur);
+  }
+
 }
