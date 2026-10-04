@@ -1,68 +1,66 @@
 <!DOCTYPE html>
 <html lang="fr" xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{base :: page('Nouveau collaborateur', ~{::contenu}, true)}">
+      th:replace="~{base :: page('Nouvelle affectation', ~{::contenu}, true)}">
 <body>
 
 <div th:fragment="contenu" class="max-w-2xl">
 
-  <h1 class="text-2xl font-bold text-slate-800 mb-1">Nouveau collaborateur</h1>
-  <p class="text-sm text-slate-500 mb-6">Renseignez les informations du collaborateur à enregistrer.</p>
+  <h1 class="text-2xl font-bold text-slate-800 mb-1">Nouvelle affectation</h1>
+  <p class="text-sm text-slate-500 mb-6">Renseignez les informations de l'affectation</p>
 
-  <form th:action="@{/collaborateurs/create}" th:object="${collaborateur}" method="post"
+  <form th:action="@{/affectation/create}" th:object="${affectation}" method="post"
         class="bg-white rounded-lg shadow p-6 space-y-5">
 
+    <!-- Collaborateur -->
+    <select id="collaborateur" th:field="*{collaborateurId}" required ...>
+      <option value="">-- Sélectionner un collaborateur --</option>
+      <option th:each="c : ${collaborateurs}" th:value="${c.id}"
+              th:text="${c.prenom + ' ' + c.nom}"></option>
+    </select>
+    <p th:if="${#fields.hasErrors('collaborateurId')}" th:errors="*{collaborateurId}"
+       class="mt-1 text-xs text-red-600"></p>
+
+    <!-- Restaurant -->
+    <select id="restaurant" th:field="*{restaurantId}" required ...>
+      <option value="">-- Sélectionner un restaurant --</option>
+      <option th:each="r : ${restaurants}" th:value="${r.id}" th:text="${r.nom}"></option>
+    </select>
+    <p th:if="${#fields.hasErrors('restaurantId')}" th:errors="*{restaurantId}"
+       class="mt-1 text-xs text-red-600"></p>
+
+    <!-- Fonction -->
+    <select id="fonction" th:field="*{fonctionId}" required ...>
+      <option value="">-- Sélectionner une fonction --</option>
+      <option th:each="f : ${fonctions}" th:value="${f.id}" th:text="${f.intitulePoste}"></option>
+    </select>
+    <p th:if="${#fields.hasErrors('fonctionId')}" th:errors="*{fonctionId}"
+       class="mt-1 text-xs text-red-600"></p>
+
+    <!-- Dates -->
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
       <div>
-        <label for="nom" class="block text-sm font-medium text-slate-700 mb-1">Nom</label>
-        <input type="text" id="nom" th:field="*{nom}" required
-               class="w-full rounded-md border border-slate-300 px-3 py-2 text-slate-800
+        <label for="dateDebut" class="block text-sm font-medium text-slate-700 mb-1">Date de début</label>
+        <input type="date" id="dateDebut" th:field="*{dateDebut}" required
+               class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm
                       focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+        <p th:if="${#fields.hasErrors('dateDebut')}" th:errors="*{dateDebut}"
+           class="mt-1 text-xs text-red-600"></p>
       </div>
 
       <div>
-        <label for="prenom" class="block text-sm font-medium text-slate-700 mb-1">Prénom</label>
-        <input type="text" id="prenom" th:field="*{prenom}" required
-               class="w-full rounded-md border border-slate-300 px-3 py-2 text-slate-800
+        <label for="dateFin" class="block text-sm font-medium text-slate-700 mb-1">
+          Date de fin <span class="text-slate-400 font-normal">(optionnelle)</span>
+        </label>
+        <input type="date" id="dateFin" th:field="*{dateFin}"
+               class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm
                       focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+        <p th:if="${#fields.hasErrors('dateFin')}" th:errors="*{dateFin}"
+           class="mt-1 text-xs text-red-600"></p>
       </div>
-    </div>
-
-    <div>
-      <label for="email" class="block text-sm font-medium text-slate-700 mb-1">Email</label>
-      <input type="email" id="email" th:field="*{email}" required
-             placeholder="prenom.nom@wacdo.fr"
-             class="w-full rounded-md border border-slate-300 px-3 py-2 text-slate-800
-                    focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
-      <p class="mt-1 text-xs text-slate-500">Sert d'identifiant de connexion.</p>
-    </div>
-
-    <div>
-      <label for="password" class="block text-sm font-medium text-slate-700 mb-1">Mot de passe</label>
-      <input type="password" id="password" th:field="*{password}" required
-             class="w-full rounded-md border border-slate-300 px-3 py-2 text-slate-800
-                    focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
-    </div>
-
-    <div>
-      <label for="datePremiereEmbauche" class="block text-sm font-medium text-slate-700 mb-1">
-        Date de première embauche
-      </label>
-      <input type="date" id="datePremiereEmbauche" th:field="*{datePremiereEmbauche}"
-             class="w-full rounded-md border border-slate-300 px-3 py-2 text-slate-800
-                    focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
-    </div>
-
-    <div class="flex items-start gap-3 rounded-md bg-slate-50 border border-slate-200 p-3">
-      <input type="checkbox" id="admin" th:field="*{admin}"
-             class="mt-0.5 h-4 w-4 rounded border-slate-300 text-amber-600 focus:ring-amber-500">
-      <label for="admin" class="text-sm text-slate-700">
-        Administrateur
-        <span class="block text-xs text-slate-500">Accès à la gestion des collaborateurs.</span>
-      </label>
     </div>
 
     <div class="flex items-center justify-end gap-3 pt-2 border-t border-slate-200">
-      <a th:href="@{/collaborateurs}"
+      <a th:href="@{/affectation}"
          class="px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-800">Annuler</a>
       <button type="submit"
               class="px-4 py-2 rounded-md bg-amber-600 text-white text-sm font-medium

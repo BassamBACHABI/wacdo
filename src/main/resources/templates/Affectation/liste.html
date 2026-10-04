@@ -37,8 +37,8 @@
       </thead>
       <tbody class="divide-y divide-slate-200">
       <tr th:each="affectation : ${affectations}" class="hover:bg-slate-50">
-        <td class="px-6 py-4 text-sm font-medium text-slate-800" th:text="${affectation.dateDebut != null ? #dates.format(affectation.dateDebut, 'dd/MM/yyyy') : '—'}">—</td>
-        <td class="px-6 py-4 text-sm text-slate-600" th:text="${affectation.dateFin != null ? #dates.format(affectation.dateFin, 'dd/MM/yyyy') : '—'}">—</td>
+        <td class="px-6 py-4 text-sm font-medium text-slate-800" th:text="${affectation.dateDebut != null ? #temporals.format(affectation.dateDebut, 'dd/MM/yyyy') : '—'}">—</td>
+        <td class="px-6 py-4 text-sm text-slate-600" th:text="${affectation.dateFin != null ? #temporals.format(affectation.dateFin, 'dd/MM/yyyy') : 'En cours'}">—</td>
         <td class="px-6 py-4 text-sm text-slate-600" th:text="${affectation.collaborateur.nom}">—</td>
         <td class="px-6 py-4 text-sm text-slate-600" th:text="${affectation.fonction.intitulePoste}">—</td>
         <td class="px-6 py-4 text-sm text-slate-600" th:text="${affectation.restaurant.nom}">—</td>

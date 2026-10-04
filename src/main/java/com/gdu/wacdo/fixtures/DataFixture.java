@@ -128,12 +128,9 @@ public class DataFixture implements CommandLineRunner {
     affectation.setCollaborateur(collaborateur);
     affectation.setRestaurant(restaurant);
     affectation.setFonction(fonction);
-    affectation.setDateDebut(enDate(dateDebut));
-    affectation.setDateFin(enDate(dateFin));
+    affectation.setDateDebut(dateDebut);
+    affectation.setDateFin(dateFin);
     return affectationRepository.save(affectation);
   }
 
-  private Date enDate(LocalDate date) {
-    return date == null ? null : Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
-  }
 }

@@ -1,12 +1,20 @@
 package com.gdu.wacdo.controller;
 
 
+import com.gdu.wacdo.dtos.AffectationFormDTO;
+import com.gdu.wacdo.dtos.CollaborateurFormDTO;
 import com.gdu.wacdo.entites.Affectation;
 import com.gdu.wacdo.service.AffectationService;
+import com.gdu.wacdo.service.CollaborateurService;
+import com.gdu.wacdo.service.FonctionService;
+import com.gdu.wacdo.service.RestaurantService;
+import jakarta.validation.Valid;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,7 +25,11 @@ import java.util.List;
 public class AffectationController {
 
   @Autowired
-    private AffectationService affectationService;
+  private final AffectationService affectationService;
+  private final CollaborateurService collaborateurService;
+  private final RestaurantService restaurantService;
+  private final FonctionService fonctionService;
+
 
   @GetMapping
   public String get(Model model){
@@ -28,12 +40,19 @@ public class AffectationController {
 
   @GetMapping("/create")
   public String createForm(Model model){
-    model.addAttribute("affectation", new Affectation());
+    model.addAttribute("affectation", new AffectationFormDTO());
+    model.addAttribute("collaborateurs", this.collaborateurService.findAll());
+    model.addAttribute("restaurants", this.restaurantService.getAll());
+    model.addAttribute("fonctions", this.fonctionService.findAll());
     return "Affectation/create";
   }
 
   @PostMapping("/create")
-  public String create(@ModelAttribute Affectation affectation) {
+  public String create(@Valid @ModelAttribute("affectation") AffectationFormDTO affectation,
+                       BindingResult result) {
+    if (result.hasErrors()) {
+      return "Collaborateur/create";
+    }
     this.affectationService.create(affectation);
     return "redirect:/affectation";
   }

@@ -3,6 +3,7 @@ package com.gdu.wacdo.entites;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -11,8 +12,8 @@ public class Affectation {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  private Date dateDebut;
-  private Date dateFin;
+  private LocalDate dateDebut;
+  private LocalDate dateFin;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "restaurant_id")

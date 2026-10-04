@@ -1,7 +1,11 @@
 package com.gdu.wacdo.service;
 
+import com.gdu.wacdo.dtos.AffectationFormDTO;
 import com.gdu.wacdo.entites.Affectation;
 import com.gdu.wacdo.repository.AffectationRepository;
+import com.gdu.wacdo.repository.CollaborateurRepository;
+import com.gdu.wacdo.repository.FonctionRepository;
+import com.gdu.wacdo.repository.RestaurantRepository;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -14,8 +18,17 @@ import java.util.List;
 public class AffectationService {
 
   private final AffectationRepository affectationRepository;
+  private final CollaborateurRepository collaborateurRepository;
+  private final RestaurantRepository restaurantRepository;
+  private final FonctionRepository  fonctionRepository;
 
-  public void create(Affectation affectation) {
+  public void create(AffectationFormDTO form) {
+    Affectation affectation = new Affectation();
+    affectation.setCollaborateur(collaborateurRepository.getReferenceById(form.getCollaborateurId()));
+    affectation.setRestaurant(restaurantRepository.getReferenceById(form.getRestaurantId()));
+    affectation.setFonction(fonctionRepository.getReferenceById(form.getFonctionId()));
+    affectation.setDateDebut(form.getDateDebut());
+    affectation.setDateFin(form.getDateFin());
     this.affectationRepository.save(affectation);
   }
 
