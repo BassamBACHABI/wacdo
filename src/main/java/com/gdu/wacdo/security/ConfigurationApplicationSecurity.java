@@ -19,11 +19,14 @@ public class ConfigurationApplicationSecurity {
       .authorizeHttpRequests(auth -> auth
         .requestMatchers("/login", "/css/**", "/js/**").permitAll()
         .requestMatchers("/collaborateurs/**").hasRole("ADMIN")
+        .requestMatchers("/restaurants/**").hasRole("ADMIN")
+        .requestMatchers("/affectation/**").hasRole("ADMIN")
+        .requestMatchers("/fonction/**").hasRole("ADMIN")
         .anyRequest().authenticated()
       )
       .formLogin(form -> form
         .loginPage("/login")
-        .defaultSuccessUrl("/restaurants", true)
+        .defaultSuccessUrl("/collaborateurs", true)
         .permitAll()
       )
       .logout(logout -> logout

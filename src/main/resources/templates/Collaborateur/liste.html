@@ -40,7 +40,7 @@
         <td class="px-6 py-4 text-sm font-medium text-slate-800" th:text="${collaborateur.nom}">—</td>
         <td class="px-6 py-4 text-sm text-slate-600" th:text="${collaborateur.prenom}">—</td>
         <td class="px-6 py-4 text-sm text-slate-600" th:text="${collaborateur.email}">—</td>
-        <td class="px-6 py-4 text-sm text-slate-600" th:text="${collaborateur.datePremiereEmbauche}">—</td>
+        <td class="px-6 py-4 text-sm text-slate-600" th:text="${collaborateur.datePremiereEmbauche != null ? #temporals.format(collaborateur.datePremiereEmbauche, 'dd/MM/yyyy') : '—'}">—</td>
         <td class="px-6 py-4 text-sm text-slate-600" th:text="${collaborateur.admin} ? 'Admin' : ''">—</td>
         <td class="px-6 py-4 text-sm text-right">
           <a th:href="@{/collaborateurs/update/{id}(id=${collaborateur.id})}"

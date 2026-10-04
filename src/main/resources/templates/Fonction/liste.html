@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html th:replace="~{base :: page('Fonctions', ~{::contenu}, true)}">
+<head>
+  <meta charset="UTF-8">
+  <title>Fonctions</title>
+</head>
+<body>
+
+<div th:fragment="contenu">
+
+  <div class="flex items-end justify-between mb-6">
+    <div>
+      <h1 class="text-2xl font-bold text-slate-800 mb-1">Fonctions</h1>
+      <p class="text-sm text-slate-500">
+        <span th:text="${#lists.size(fonctions)}">0</span> fonction(s) enregistrée(s).
+      </p>
+    </div>
+    <a th:href="@{/fonction/create}"
+       class="px-4 py-2 rounded-md bg-amber-600 text-white text-sm font-medium
+              hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-amber-500
+              focus:ring-offset-2">
+      Nouvelle fonction
+    </a>
+  </div>
+
+  <div class="bg-white rounded-lg shadow overflow-hidden">
+    <table class="min-w-full divide-y divide-slate-200">
+      <thead class="bg-slate-50">
+      <tr>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Intitulé du poste</th>
+        <th scope="col" class="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-slate-500">Actions</th>
+      </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-200">
+      <tr th:each="fonction : ${fonctions}" class="hover:bg-slate-50">
+        <td class="px-6 py-4 text-sm text-slate-600" th:text="${fonction.intitulePoste}">—</td>
+        <td class="px-6 py-4 text-sm text-right">
+          <a th:href="@{/fonction/update/{id}(id=${fonction.id})}"
+             class="font-medium text-amber-600 hover:text-amber-700 hover:underline">Modifier</a>
+          <form th:action="@{/fonction/delete/{id}(id=${fonction.id})}"
+                method="post"
+                style="display: inline;"
+                onsubmit="return confirm('Supprimer cette fonction ?')">
+            <button type="submit"
+                    class="px-3 py-2 rounded-md bg-red-600 text-white hover:bg-red-700">
+              Supprimer
+            </button>
+          </form>
+        </td>
+      </tr>
+      <tr th:if="${#lists.isEmpty(fonctions)}">
+        <td colspan="6" class="px-6 py-10 text-center text-sm text-slate-500">
+          Aucune fonction enregistrée.
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+</body>
+</html>

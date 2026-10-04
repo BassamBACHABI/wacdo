@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html th:replace="~{base :: page('Affectations', ~{::contenu}, true)}">
+<head>
+  <meta charset="UTF-8">
+  <title>Affectations</title>
+</head>
+<body>
+
+<div th:fragment="contenu">
+
+  <div class="flex items-end justify-between mb-6">
+    <div>
+      <h1 class="text-2xl font-bold text-slate-800 mb-1">Affectations</h1>
+      <p class="text-sm text-slate-500">
+        <span th:text="${#lists.size(affectations)}">0</span> affectation(s) enregistrée(s).
+      </p>
+    </div>
+    <a th:href="@{/affectation/create}"
+       class="px-4 py-2 rounded-md bg-amber-600 text-white text-sm font-medium
+              hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-amber-500
+              focus:ring-offset-2">
+      Nouvelle affectation
+    </a>
+  </div>
+
+  <div class="bg-white rounded-lg shadow overflow-hidden">
+    <table class="min-w-full divide-y divide-slate-200">
+      <thead class="bg-slate-50">
+      <tr>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Début</th>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Fin</th>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Collaborateur</th>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Fonction</th>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Restaurant</th>
+        <th scope="col" class="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-slate-500">Actions</th>
+      </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-200">
+      <tr th:each="affectation : ${affectations}" class="hover:bg-slate-50">
+        <td class="px-6 py-4 text-sm font-medium text-slate-800" th:text="${affectation.dateDebut != null ? #dates.format(affectation.dateDebut, 'dd/MM/yyyy') : '—'}">—</td>
+        <td class="px-6 py-4 text-sm text-slate-600" th:text="${affectation.dateFin != null ? #dates.format(affectation.dateFin, 'dd/MM/yyyy') : '—'}">—</td>
+        <td class="px-6 py-4 text-sm text-slate-600" th:text="${affectation.collaborateur.nom}">—</td>
+        <td class="px-6 py-4 text-sm text-slate-600" th:text="${affectation.fonction.intitulePoste}">—</td>
+        <td class="px-6 py-4 text-sm text-slate-600" th:text="${affectation.restaurant.nom}">—</td>
+        <td class="px-6 py-4 text-sm text-right">
+          <a th:href="@{/affectation/update/{id}(id=${affectation.id})}"
+             class="font-medium text-amber-600 hover:text-amber-700 hover:underline">Modifier</a>
+          <form th:action="@{/affectation/delete/{id}(id=${affectation.id})}"
+                method="post"
+                style="display: inline;"
+                onsubmit="return confirm('Supprimer cette affectation ?')">
+            <button type="submit"
+                    class="px-3 py-2 rounded-md bg-red-600 text-white hover:bg-red-700">
+              Supprimer
+            </button>
+          </form>
+        </td>
+      </tr>
+      <tr th:if="${#lists.isEmpty(affectations)}">
+        <td colspan="6" class="px-6 py-10 text-center text-sm text-slate-500">
+          Aucune affectation enregistrée.
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+</body>
+</html>

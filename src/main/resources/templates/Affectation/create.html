@@ -17,8 +17,6 @@
         <input type="text" id="nom" th:field="*{nom}" required
                class="w-full rounded-md border border-slate-300 px-3 py-2 text-slate-800
                       focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
-        <p th:if="${#fields.hasErrors('nom')}" th:errors="*{nom}"
-           class="mt-1 text-xs text-red-600"></p>
       </div>
 
       <div>
@@ -26,8 +24,6 @@
         <input type="text" id="prenom" th:field="*{prenom}" required
                class="w-full rounded-md border border-slate-300 px-3 py-2 text-slate-800
                       focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
-        <p th:if="${#fields.hasErrors('prenom')}" th:errors="*{prenom}"
-           class="mt-1 text-xs text-red-600"></p>
       </div>
     </div>
 
@@ -37,8 +33,6 @@
              placeholder="prenom.nom@wacdo.fr"
              class="w-full rounded-md border border-slate-300 px-3 py-2 text-slate-800
                     focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
-      <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
-         class="mt-1 text-xs text-red-600"></p>
       <p class="mt-1 text-xs text-slate-500">Sert d'identifiant de connexion.</p>
     </div>
 
@@ -47,8 +41,6 @@
       <input type="password" id="password" th:field="*{password}" required
              class="w-full rounded-md border border-slate-300 px-3 py-2 text-slate-800
                     focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
-      <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
-         class="mt-1 text-xs text-red-600"></p>
     </div>
 
     <div>
