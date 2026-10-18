@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{base :: page('Détail du restaurant', ~{::contenu}, true)}">
+<body>
+
+<div th:fragment="contenu" class="max-w-2xl">
+
+  <a th:href="@{/restaurants}" class="text-sm text-slate-500 hover:text-slate-800">&larr; Retour à la liste</a>
+
+  <div class="flex items-end justify-between mt-3 mb-6">
+    <h1 class="text-2xl font-bold text-slate-800" th:text="${restaurant.nom}">Nom</h1>
+    <a th:href="@{/restaurants/update/{id}(id=${restaurant.id})}"
+       class="px-4 py-2 rounded-md bg-amber-600 text-white text-sm font-medium hover:bg-amber-700">
+      Modifier
+    </a>
+    <form th:action="@{/restaurants/delete/{id}(id=${restaurant.id})}"
+          method="post"
+          style="display: inline;"
+          onsubmit="return confirm('Supprimer ce restaurant ?')">
+      <button type="submit"
+              class="px-3 py-2 rounded-md bg-red-600 text-white hover:bg-red-700">
+        Supprimer
+      </button>
+    </form>
+  </div>
+
+  <div class="bg-white rounded-lg shadow p-6">
+    <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
+      <div class="sm:col-span-2">
+        <dt class="text-xs font-semibold uppercase tracking-wider text-slate-500">Adresse</dt>
+        <dd class="mt-1 text-sm text-slate-800" th:text="${restaurant.adresse}">—</dd>
+      </div>
+      <div>
+        <dt class="text-xs font-semibold uppercase tracking-wider text-slate-500">Code postal</dt>
+        <dd class="mt-1 text-sm text-slate-800" th:text="${restaurant.codePostal}">—</dd>
+      </div>
+      <div>
+        <dt class="text-xs font-semibold uppercase tracking-wider text-slate-500">Ville</dt>
+        <dd class="mt-1 text-sm text-slate-800" th:text="${restaurant.ville}">—</dd>
+      </div>
+    </dl>
+  </div>
+
+  <div class="flex items-end justify-between mt-8 mb-3">
+    <div>
+      <h2 class="text-lg font-semibold text-slate-800">Collaborateurs en poste</h2>
+      <p class="text-sm text-slate-500" th:text="|${#lists.size(collaborateurs)} résultat(s)|">0 résultat(s)</p>
+    </div>
+  </div>
+
+  <form th:action="@{/restaurants/detail/{id}(id=${restaurant.id})}" method="get"
+        class="flex items-center gap-3 mb-4">
+    <input type="search" name="q" th:value="${q}"
+           placeholder="Rechercher par nom, poste ou date de début (jj/mm/aaaa)"
+           class="flex-1 rounded-md border border-slate-300 px-3 py-2 text-sm bg-white
+                focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+    <button type="submit"
+            class="px-4 py-2 rounded-md bg-amber-600 text-white text-sm font-medium hover:bg-amber-700">
+      Rechercher
+    </button>
+    <a th:if="${q != null and !q.isBlank()}"
+       th:href="@{/restaurants/detail/{id}(id=${restaurant.id})}"
+       class="text-sm font-medium text-slate-600 hover:text-slate-800">Réinitialiser</a>
+  </form>
+
+  <div class="bg-white rounded-lg shadow overflow-hidden">
+    <table class="min-w-full divide-y divide-slate-200">
+      <thead class="bg-slate-50">
+      <tr>
+        <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Collaborateur</th>
+        <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Poste</th>
+        <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Depuis le</th>
+      </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-200">
+      <tr th:each="affectation : ${collaborateurs}" class="hover:bg-slate-50">
+        <td class="px-6 py-4 text-sm font-medium text-slate-800"
+            th:text="|${affectation.collaborateur.prenom} ${affectation.collaborateur.nom}|">Nom</td>
+        <td class="px-6 py-4 text-sm text-slate-600" th:text="${affectation.fonction.intitulePoste}">Poste</td>
+        <td class="px-6 py-4 text-sm text-slate-600"
+            th:text="${affectation.dateDebut != null ? #temporals.format(affectation.dateDebut, 'dd/MM/yyyy') : '—'}">—</td>
+      </tr>
+      <tr th:if="${#lists.isEmpty(collaborateurs)}">
+        <td colspan="3" class="px-6 py-10 text-center text-sm text-slate-500"
+            th:text="${q != null and !q.isBlank() ? 'Aucun collaborateur ne correspond à cette recherche.' : 'Aucun collaborateur en poste dans ce restaurant.'}">
+          Aucun collaborateur en poste.
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+</body>
+</html>

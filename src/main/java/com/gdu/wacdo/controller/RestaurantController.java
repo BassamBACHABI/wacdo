@@ -1,6 +1,5 @@
 package com.gdu.wacdo.controller;
 
-import com.gdu.wacdo.entites.Collaborateur;
 import com.gdu.wacdo.entites.Restaurant;
 import com.gdu.wacdo.service.RestaurantService;
 import org.springframework.stereotype.Controller;
@@ -13,8 +12,7 @@ import java.util.List;
 @RequestMapping("/restaurants")
 public class RestaurantController {
 
-  final RestaurantService restaurantService;
-
+  private final RestaurantService restaurantService;
   public RestaurantController(RestaurantService restaurantService) {
     this.restaurantService = restaurantService;
   }
@@ -56,5 +54,15 @@ public class RestaurantController {
   public String delete(@PathVariable Long id) {
     this.restaurantService.deleteRestaurant(id);
     return "redirect:/restaurants";
+  }
+
+  @GetMapping("/detail/{id}")
+  public String detail(@PathVariable Long id,
+                       @RequestParam(required = false) String q,
+                       Model model) {
+    model.addAttribute("restaurant", this.restaurantService.getRestaurantById(id));
+    model.addAttribute("collaborateurs", this.restaurantService.collaborateursEnPoste(id, q));
+    model.addAttribute("q", q);
+    return "Restaurant/detail";
   }
 }

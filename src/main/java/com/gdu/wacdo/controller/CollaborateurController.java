@@ -5,12 +5,10 @@ import com.gdu.wacdo.dtos.CollaborateurViewDTO;
 import com.gdu.wacdo.service.CollaborateurService;
 import jakarta.validation.Valid;
 import lombok.Data;
-import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

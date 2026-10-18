@@ -7,7 +7,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDate;
 
 @Data
-public class AffectationFormDTO {
+public class AffectationDTO {
+
+  private Long id;
 
   @NotNull(message = "Le collaborateur est obligatoire")
   private Long collaborateurId;

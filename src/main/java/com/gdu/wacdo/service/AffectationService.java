@@ -1,11 +1,12 @@
 package com.gdu.wacdo.service;
 
-import com.gdu.wacdo.dtos.AffectationFormDTO;
+import com.gdu.wacdo.dtos.AffectationDTO;
 import com.gdu.wacdo.entites.Affectation;
 import com.gdu.wacdo.repository.AffectationRepository;
 import com.gdu.wacdo.repository.CollaborateurRepository;
 import com.gdu.wacdo.repository.FonctionRepository;
 import com.gdu.wacdo.repository.RestaurantRepository;
+import jakarta.transaction.Transactional;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ public class AffectationService {
   private final RestaurantRepository restaurantRepository;
   private final FonctionRepository  fonctionRepository;
 
-  public void create(AffectationFormDTO form) {
+  public void create(AffectationDTO form) {
     Affectation affectation = new Affectation();
     affectation.setCollaborateur(collaborateurRepository.getReferenceById(form.getCollaborateurId()));
     affectation.setRestaurant(restaurantRepository.getReferenceById(form.getRestaurantId()));
@@ -32,18 +33,17 @@ public class AffectationService {
     this.affectationRepository.save(affectation);
   }
 
-  public void update(Affectation affectation) {
+  @Transactional
+  public void update(AffectationDTO affectation) {
     Affectation existant = this.affectationRepository.findById(affectation.getId()).orElseThrow();
     existant.setDateDebut(affectation.getDateDebut());
     existant.setDateFin(affectation.getDateFin());
-    existant.setCollaborateur(affectation.getCollaborateur());
-    existant.setFonction(affectation.getFonction());
-    existant.setRestaurant(affectation.getRestaurant());
-    this.affectationRepository.save(existant);
+    existant.setCollaborateur(collaborateurRepository.getReferenceById(affectation.getCollaborateurId()));
+    existant.setFonction(fonctionRepository.getReferenceById(affectation.getFonctionId()));
+    existant.setRestaurant(restaurantRepository.getReferenceById(affectation.getRestaurantId()));
   }
 
   public List<Affectation> findAll() {
-    log.info("mes affectations : {}", this.affectationRepository.findAll().getFirst().getCollaborateur().getEmail());
     return this.affectationRepository.findAll();
   }
 

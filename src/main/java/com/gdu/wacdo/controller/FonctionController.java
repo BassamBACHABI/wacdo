@@ -1,7 +1,6 @@
 package com.gdu.wacdo.controller;
 
-import com.gdu.wacdo.entites.Affectation;
-import com.gdu.wacdo.entites.Fonction;
+import com.gdu.wacdo.dtos.FonctionDTO;
 import com.gdu.wacdo.service.FonctionService;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,32 +19,32 @@ public class FonctionController {
 
   @GetMapping
   public String get(Model model){
-    List<Fonction> fonctions = this.fonctionService.findAll();
+    List<FonctionDTO> fonctions = this.fonctionService.findAll();
     model.addAttribute("fonctions", fonctions);
     return "Fonction/liste";
   }
 
   @GetMapping("/create")
   public String createForm(Model model){
-    model.addAttribute("fonction", new Fonction());
+    model.addAttribute("fonction", new FonctionDTO());
     return "Fonction/create";
   }
 
   @PostMapping("/create")
-  public String create(@ModelAttribute Fonction fonction) {
+  public String create(@ModelAttribute FonctionDTO fonction) {
     this.fonctionService.create(fonction);
     return "redirect:/fonction";
   }
 
   @GetMapping("/update/{id}")
   public String updateForm(@PathVariable Long id, Model model){
-    Fonction fonction = this.fonctionService.findById(id);
+    FonctionDTO fonction = this.fonctionService.findById(id);
     model.addAttribute("fonction", fonction);
     return "Fonction/update";
   }
 
   @PostMapping("/update")
-  public String update(@ModelAttribute Fonction fonction) {
+  public String update(@ModelAttribute FonctionDTO fonction) {
     this.fonctionService.update(fonction);
     return "redirect:/fonction";
   }

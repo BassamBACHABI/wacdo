@@ -1,8 +1,7 @@
 package com.gdu.wacdo.controller;
 
 
-import com.gdu.wacdo.dtos.AffectationFormDTO;
-import com.gdu.wacdo.dtos.CollaborateurFormDTO;
+import com.gdu.wacdo.dtos.AffectationDTO;
 import com.gdu.wacdo.entites.Affectation;
 import com.gdu.wacdo.service.AffectationService;
 import com.gdu.wacdo.service.CollaborateurService;
@@ -10,10 +9,10 @@ import com.gdu.wacdo.service.FonctionService;
 import com.gdu.wacdo.service.RestaurantService;
 import jakarta.validation.Valid;
 import lombok.Data;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +28,8 @@ public class AffectationController {
   private final CollaborateurService collaborateurService;
   private final RestaurantService restaurantService;
   private final FonctionService fonctionService;
+  private final ModelMapper modelMapper;
+
 
 
   @GetMapping
@@ -40,7 +41,7 @@ public class AffectationController {
 
   @GetMapping("/create")
   public String createForm(Model model){
-    model.addAttribute("affectation", new AffectationFormDTO());
+    model.addAttribute("affectation", new AffectationDTO());
     model.addAttribute("collaborateurs", this.collaborateurService.findAll());
     model.addAttribute("restaurants", this.restaurantService.getAll());
     model.addAttribute("fonctions", this.fonctionService.findAll());
@@ -48,7 +49,7 @@ public class AffectationController {
   }
 
   @PostMapping("/create")
-  public String create(@Valid @ModelAttribute("affectation") AffectationFormDTO affectation,
+  public String create(@Valid @ModelAttribute("affectation") AffectationDTO affectation,
                        BindingResult result) {
     if (result.hasErrors()) {
       return "Collaborateur/create";
@@ -60,12 +61,23 @@ public class AffectationController {
   @GetMapping("/update/{id}")
   public String updateForm(@PathVariable Long id, Model model){
     Affectation affectation = this.affectationService.findById(id);
-    model.addAttribute("affectation", affectation);
+    AffectationDTO affectationDTO = this.modelMapper.map(affectation, AffectationDTO.class);;
+    model.addAttribute("affectation", affectationDTO);
+    model.addAttribute("collaborateurs", this.collaborateurService.findAll());
+    model.addAttribute("restaurants", this.restaurantService.getAll());
+    model.addAttribute("fonctions", this.fonctionService.findAll());
     return "Affectation/update";
   }
 
   @PostMapping("/update")
-  public String update(@ModelAttribute Affectation affectation) {
+  public String update(@Valid @ModelAttribute("affectation") AffectationDTO affectation,
+                       BindingResult result, Model model) {
+    if (result.hasErrors()) {
+      model.addAttribute("collaborateurs", this.collaborateurService.findAll());
+      model.addAttribute("restaurants", this.restaurantService.getAll());
+      model.addAttribute("fonctions", this.fonctionService.findAll());
+      return "Affectation/update";
+    }
     this.affectationService.update(affectation);
     return "redirect:/affectation";
   }
