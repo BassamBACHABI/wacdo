@@ -10,18 +10,50 @@
 
   <div class="flex items-end justify-between mb-6">
     <div>
-      <h1 class="text-2xl font-bold text-slate-800 mb-1">Collaborateurs</h1>
+      <h1 class="text-2xl font-bold text-slate-800 mb-1"
+          th:text="${nonAffectes} ? 'Collaborateurs non affectés' : 'Collaborateurs'">Collaborateurs</h1>
       <p class="text-sm text-slate-500">
-        <span th:text="${#lists.size(collaborateurs)}">0</span> collaborateur(s) enregistré(s).
+        <span th:text="${#lists.size(collaborateurs)}">0</span>
+        <span th:text="${!#strings.isEmpty(q)} ? 'résultat(s).' : (${nonAffectes} ? 'collaborateur(s) sans affectation.' : 'collaborateur(s) enregistré(s).')">
+          collaborateur(s) enregistré(s).
+        </span>
       </p>
     </div>
-    <a th:href="@{/collaborateurs/create}"
-       class="px-4 py-2 rounded-md bg-amber-600 text-white text-sm font-medium
-              hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-amber-500
-              focus:ring-offset-2">
-      Nouveau collaborateur
-    </a>
+    <div class="flex flex-wrap gap-2">
+      <a th:if="${!nonAffectes}" th:href="@{/collaborateurs/non-affectes}"
+         class="px-4 py-2 rounded-md border border-amber-600 text-amber-700 text-sm font-medium
+                hover:bg-amber-50 focus:outline-none focus:ring-2 focus:ring-amber-500">
+        Rechercher les non affectés
+      </a>
+      <a th:if="${nonAffectes}" th:href="@{/collaborateurs}"
+         class="px-4 py-2 rounded-md border border-slate-300 text-slate-700 text-sm font-medium
+                hover:bg-slate-50">
+        Tous les collaborateurs
+      </a>
+      <a th:href="@{/collaborateurs/create}"
+         class="px-4 py-2 rounded-md bg-amber-600 text-white text-sm font-medium
+                hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-amber-500
+                focus:ring-offset-2">
+        Nouveau collaborateur
+      </a>
+    </div>
   </div>
+
+  <form th:action="@{${rechercheAction}}"
+        method="get" class="flex flex-col sm:flex-row gap-3 mb-4">
+    <input type="search" name="q" th:value="${q}"
+           placeholder="Rechercher par nom, prénom ou email"
+           aria-label="Rechercher par nom, prénom ou email"
+           class="flex-1 rounded-md border border-slate-300 px-3 py-2 text-sm bg-white
+                  focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+    <button type="submit"
+            class="px-4 py-2 rounded-md bg-amber-600 text-white text-sm font-medium hover:bg-amber-700">
+      Rechercher
+    </button>
+    <a th:if="${!#strings.isEmpty(q)}"
+       th:href="@{${rechercheAction}}"
+       class="px-3 py-2 text-sm font-medium text-slate-600 hover:text-slate-800">Réinitialiser</a>
+  </form>
 
   <div class="bg-white rounded-lg shadow overflow-hidden">
     <table class="min-w-full divide-y divide-slate-200">
@@ -32,33 +64,27 @@
         <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Email</th>
         <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Date d'embauche</th>
         <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Admin</th>
-        <th scope="col" class="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-slate-500">Actions</th>
       </tr>
       </thead>
       <tbody class="divide-y divide-slate-200">
       <tr th:each="collaborateur : ${collaborateurs}" class="hover:bg-slate-50">
-        <td class="px-6 py-4 text-sm font-medium text-slate-800" th:text="${collaborateur.nom}">—</td>
-        <td class="px-6 py-4 text-sm text-slate-600" th:text="${collaborateur.prenom}">—</td>
+        <td class="px-6 py-4 text-sm font-medium text-slate-800">
+          <a th:href="@{/collaborateurs/detail/{id}(id=${collaborateur.id})}"
+             class="hover:text-amber-700 hover:underline" th:text="${collaborateur.nom}">—</a>
+        </td>
+        <td class="px-6 py-4 text-sm text-slate-600">
+          <a th:href="@{/collaborateurs/detail/{id}(id=${collaborateur.id})}"
+             class="hover:text-amber-700 hover:underline" th:text="${collaborateur.prenom}">—</a>
+        </td>
         <td class="px-6 py-4 text-sm text-slate-600" th:text="${collaborateur.email}">—</td>
         <td class="px-6 py-4 text-sm text-slate-600" th:text="${collaborateur.datePremiereEmbauche != null ? #temporals.format(collaborateur.datePremiereEmbauche, 'dd/MM/yyyy') : '—'}">—</td>
         <td class="px-6 py-4 text-sm text-slate-600" th:text="${collaborateur.admin} ? 'Admin' : ''">—</td>
-        <td class="px-6 py-4 text-sm text-right">
-          <a th:href="@{/collaborateurs/update/{id}(id=${collaborateur.id})}"
-             class="font-medium text-amber-600 hover:text-amber-700 hover:underline">Modifier</a>
-          <form th:action="@{/collaborateurs/delete/{id}(id=${collaborateur.id})}"
-                method="post"
-                style="display: inline;"
-                onsubmit="return confirm('Supprimer ce collaborateur ?')">
-            <button type="submit"
-                    class="px-3 py-2 rounded-md bg-red-600 text-white hover:bg-red-700">
-              Supprimer
-            </button>
-          </form>
-        </td>
       </tr>
       <tr th:if="${#lists.isEmpty(collaborateurs)}">
-        <td colspan="6" class="px-6 py-10 text-center text-sm text-slate-500">
-          Aucun collaborateur enregistré.
+        <td colspan="5" class="px-6 py-10 text-center text-sm text-slate-500">
+          <span th:text="${!#strings.isEmpty(q) ? 'Aucun collaborateur ne correspond à cette recherche.' : (nonAffectes ? 'Tous les collaborateurs ont au moins une affectation.' : 'Aucun collaborateur enregistré.')} ">
+            Aucun collaborateur enregistré.
+          </span>
         </td>
       </tr>
       </tbody>

@@ -40,22 +40,23 @@ public class AffectationController {
   }
 
   @GetMapping("/create")
-  public String createForm(Model model){
-    model.addAttribute("affectation", new AffectationDTO());
-    model.addAttribute("collaborateurs", this.collaborateurService.findAll());
-    model.addAttribute("restaurants", this.restaurantService.getAll());
-    model.addAttribute("fonctions", this.fonctionService.findAll());
+  public String createForm(@RequestParam(required = false) Long collaborateurId, Model model){
+    AffectationDTO affectation = new AffectationDTO();
+    affectation.setCollaborateurId(collaborateurId);
+    model.addAttribute("affectation", affectation);
+    addFormOptions(model);
     return "Affectation/create";
   }
 
   @PostMapping("/create")
   public String create(@Valid @ModelAttribute("affectation") AffectationDTO affectation,
-                       BindingResult result) {
+                       BindingResult result, Model model) {
     if (result.hasErrors()) {
-      return "Collaborateur/create";
+      addFormOptions(model);
+      return "Affectation/create";
     }
     this.affectationService.create(affectation);
-    return "redirect:/affectation";
+    return "redirect:/collaborateurs/detail/" + affectation.getCollaborateurId();
   }
 
   @GetMapping("/update/{id}")
@@ -79,12 +80,18 @@ public class AffectationController {
       return "Affectation/update";
     }
     this.affectationService.update(affectation);
-    return "redirect:/affectation";
+    return "redirect:/collaborateurs/detail/" + affectation.getCollaborateurId();
   }
 
   @PostMapping("/delete/{id}")
   public String delete(@PathVariable Long id) {
     this.affectationService.deleteById(id);
     return "redirect:/affectation";
+  }
+
+  private void addFormOptions(Model model) {
+    model.addAttribute("collaborateurs", this.collaborateurService.findAll());
+    model.addAttribute("restaurants", this.restaurantService.getAll());
+    model.addAttribute("fonctions", this.fonctionService.findAll());
   }
 }

@@ -1,6 +1,7 @@
 package com.gdu.wacdo.controller;
 
 import com.gdu.wacdo.dtos.CollaborateurFormDTO;
+import com.gdu.wacdo.dtos.CollaborateurDetailDTO;
 import com.gdu.wacdo.dtos.CollaborateurViewDTO;
 import com.gdu.wacdo.service.CollaborateurService;
 import jakarta.validation.Valid;
@@ -10,7 +11,9 @@ import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -21,10 +24,35 @@ public class CollaborateurController {
   private final CollaborateurService collaborateurService;
 
   @GetMapping
-  public String getCollaborateur(Model model){
-    List<CollaborateurViewDTO> collaborateurs = this.collaborateurService.findAll();
+  public String getCollaborateur(@RequestParam(defaultValue = "") String q, Model model){
+    List<CollaborateurViewDTO> collaborateurs = this.collaborateurService.rechercher(q, false);
     model.addAttribute("collaborateurs", collaborateurs);
+    model.addAttribute("nonAffectes", false);
+    model.addAttribute("q", q);
+    model.addAttribute("rechercheAction", "/collaborateurs");
     return "Collaborateur/liste";
+  }
+
+  @GetMapping("/non-affectes")
+  public String getCollaborateursNonAffectes(@RequestParam(defaultValue = "") String q, Model model){
+    List<CollaborateurViewDTO> collaborateurs = this.collaborateurService.rechercher(q, true);
+    model.addAttribute("collaborateurs", collaborateurs);
+    model.addAttribute("nonAffectes", true);
+    model.addAttribute("q", q);
+    model.addAttribute("rechercheAction", "/collaborateurs/non-affectes");
+    return "Collaborateur/liste";
+  }
+
+  @GetMapping("/detail/{id}")
+  public String detail(@PathVariable Long id,
+                       @RequestParam(defaultValue = "") String poste,
+                       @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateDebut,
+                       Model model) {
+    CollaborateurDetailDTO collaborateur = this.collaborateurService.findDetailById(id, poste, dateDebut);
+    model.addAttribute("collaborateur", collaborateur);
+    model.addAttribute("poste", poste);
+    model.addAttribute("dateDebut", dateDebut);
+    return "Collaborateur/detail";
   }
 
   @GetMapping("/create")

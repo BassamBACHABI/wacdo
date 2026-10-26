@@ -1,7 +1,10 @@
 package com.gdu.wacdo.mapper;
 
 import com.gdu.wacdo.dtos.CollaborateurFormDTO;
+import com.gdu.wacdo.dtos.AffectationDetailDTO;
+import com.gdu.wacdo.dtos.CollaborateurDetailDTO;
 import com.gdu.wacdo.dtos.CollaborateurViewDTO;
+import com.gdu.wacdo.entites.Affectation;
 import com.gdu.wacdo.entites.Collaborateur;
 import lombok.Data;
 import org.modelmapper.ModelMapper;
@@ -21,6 +24,14 @@ public class CollaborateurMapper {
 
   public List<CollaborateurViewDTO> toViewList(List<Collaborateur> collaborateurs) {
     return collaborateurs.stream().map(this::toView).toList();
+  }
+
+  public CollaborateurDetailDTO toDetail(Collaborateur collaborateur) {
+    return this.modelMapper.map(collaborateur, CollaborateurDetailDTO.class);
+  }
+
+  public AffectationDetailDTO toAffectationDetail(Affectation affectation) {
+    return this.modelMapper.map(affectation, AffectationDetailDTO.class);
   }
 
   public CollaborateurFormDTO toForm(Collaborateur collaborateur) {

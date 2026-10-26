@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{base :: page('Détail du collaborateur', ~{::contenu}, true)}">
+<body>
+
+<div th:fragment="contenu">
+  <a th:href="@{/collaborateurs}" class="text-sm text-slate-500 hover:text-slate-800">&larr; Retour aux collaborateurs</a>
+
+  <div class="flex flex-wrap items-center justify-between gap-3 mt-3 mb-6">
+    <h1 class="text-2xl font-bold text-slate-800"
+        th:text="|${collaborateur.prenom} ${collaborateur.nom}|">Collaborateur</h1>
+    <div class="flex items-center gap-2">
+      <a th:href="@{/affectation/create(collaborateurId=${collaborateur.id})}"
+         class="px-4 py-2 rounded-md border border-amber-600 text-amber-700 text-sm font-medium hover:bg-amber-50">
+        Affecter à un nouveau poste
+      </a>
+      <a th:href="@{/collaborateurs/update/{id}(id=${collaborateur.id})}"
+         class="px-4 py-2 rounded-md bg-amber-600 text-white text-sm font-medium hover:bg-amber-700">
+        Modifier
+      </a>
+      <form th:action="@{/collaborateurs/delete/{id}(id=${collaborateur.id})}"
+            method="post"
+            onsubmit="return confirm('Supprimer ce collaborateur ?')">
+        <button type="submit"
+                class="px-4 py-2 rounded-md bg-red-600 text-white text-sm font-medium hover:bg-red-700">
+          Supprimer
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <section class="bg-white rounded-lg shadow p-6">
+    <h2 class="text-lg font-semibold text-slate-800 mb-4">Informations</h2>
+    <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
+      <div>
+        <dt class="text-xs font-semibold uppercase tracking-wider text-slate-500">Email</dt>
+        <dd class="mt-1 text-sm text-slate-800" th:text="${collaborateur.email}">—</dd>
+      </div>
+      <div>
+        <dt class="text-xs font-semibold uppercase tracking-wider text-slate-500">Date de première embauche</dt>
+        <dd class="mt-1 text-sm text-slate-800"
+            th:text="${collaborateur.datePremiereEmbauche != null ? #temporals.format(collaborateur.datePremiereEmbauche, 'dd/MM/yyyy') : '—'}">—</dd>
+      </div>
+      <div>
+        <dt class="text-xs font-semibold uppercase tracking-wider text-slate-500">Administrateur</dt>
+        <dd class="mt-1 text-sm text-slate-800" th:text="${collaborateur.admin} ? 'Oui' : 'Non'">Non</dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="mt-8">
+    <div class="mb-3">
+      <h2 class="text-lg font-semibold text-slate-800">Affectations en cours</h2>
+      <p class="text-sm text-slate-500" th:text="|${#lists.size(collaborateur.affectationsEnCours)} affectation(s)|">0 affectation(s)</p>
+    </div>
+    <div class="bg-white rounded-lg shadow overflow-hidden">
+      <table class="min-w-full divide-y divide-slate-200">
+        <thead class="bg-slate-50">
+        <tr>
+          <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Poste</th>
+          <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Restaurant</th>
+          <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Début</th>
+          <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Fin</th>
+          <th class="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-slate-500">Actions</th>
+        </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-200">
+        <tr th:each="affectation : ${collaborateur.affectationsEnCours}">
+          <td class="px-6 py-4 text-sm font-medium text-slate-800" th:text="${affectation.fonctionIntitule}">—</td>
+          <td class="px-6 py-4 text-sm text-slate-600" th:text="${affectation.restaurantNom}">—</td>
+          <td class="px-6 py-4 text-sm text-slate-600"
+              th:text="${affectation.dateDebut != null ? #temporals.format(affectation.dateDebut, 'dd/MM/yyyy') : '—'}">—</td>
+          <td class="px-6 py-4 text-sm text-slate-600"
+              th:text="${affectation.dateFin != null ? #temporals.format(affectation.dateFin, 'dd/MM/yyyy') : 'En cours'}">En cours</td>
+          <td class="px-6 py-4 text-sm text-right">
+            <a th:href="@{/affectation/update/{id}(id=${affectation.id})}"
+               class="font-medium text-amber-600 hover:text-amber-700 hover:underline">Modifier</a>
+          </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(collaborateur.affectationsEnCours)}">
+          <td colspan="5" class="px-6 py-6 text-center text-sm text-slate-500">Aucune affectation en cours.</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="mt-8" th:if="${!#lists.isEmpty(collaborateur.affectationsFutures)}">
+    <div class="mb-3">
+      <h2 class="text-lg font-semibold text-slate-800">Affectations à venir</h2>
+    </div>
+    <div class="bg-white rounded-lg shadow overflow-hidden">
+      <table class="min-w-full divide-y divide-slate-200">
+        <thead class="bg-slate-50">
+        <tr>
+          <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Poste</th>
+          <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Restaurant</th>
+          <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Début</th>
+          <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Fin</th>
+        </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-200">
+        <tr th:each="affectation : ${collaborateur.affectationsFutures}">
+          <td class="px-6 py-4 text-sm font-medium text-slate-800" th:text="${affectation.fonctionIntitule}">—</td>
+          <td class="px-6 py-4 text-sm text-slate-600" th:text="${affectation.restaurantNom}">—</td>
+          <td class="px-6 py-4 text-sm text-slate-600"
+              th:text="${affectation.dateDebut != null ? #temporals.format(affectation.dateDebut, 'dd/MM/yyyy') : '—'}">—</td>
+          <td class="px-6 py-4 text-sm text-slate-600"
+              th:text="${affectation.dateFin != null ? #temporals.format(affectation.dateFin, 'dd/MM/yyyy') : '—'}">—</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="mt-8">
+    <div class="mb-3">
+      <h2 class="text-lg font-semibold text-slate-800">Historique des affectations</h2>
+      <p class="text-sm text-slate-500" th:text="|${#lists.size(collaborateur.historiqueAffectations)} affectation(s) terminée(s)|">0 affectation(s)</p>
+    </div>
+    <form th:action="@{/collaborateurs/detail/{id}(id=${collaborateur.id})}" method="get"
+          class="flex flex-col sm:flex-row sm:items-end gap-3 mb-4">
+      <div class="flex-1">
+        <label for="poste" class="block text-sm font-medium text-slate-700 mb-1">Poste</label>
+        <input type="search" id="poste" name="poste" th:value="${poste}"
+               placeholder="Ex. Manager"
+               class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm bg-white
+                      focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+      </div>
+      <div>
+        <label for="dateDebutHistorique" class="block text-sm font-medium text-slate-700 mb-1">Date de début</label>
+        <input type="date" id="dateDebutHistorique" name="dateDebut" th:value="${dateDebut}"
+               class="rounded-md border border-slate-300 px-3 py-2 text-sm bg-white
+                      focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+      </div>
+      <button type="submit"
+              class="px-4 py-2 rounded-md bg-amber-600 text-white text-sm font-medium hover:bg-amber-700">
+        Filtrer
+      </button>
+      <a th:if="${!#strings.isEmpty(poste) or dateDebut != null}"
+         th:href="@{/collaborateurs/detail/{id}(id=${collaborateur.id})}"
+         class="px-3 py-2 text-sm font-medium text-slate-600 hover:text-slate-800">Réinitialiser</a>
+    </form>
+    <div class="bg-white rounded-lg shadow overflow-hidden">
+      <table class="min-w-full divide-y divide-slate-200">
+        <thead class="bg-slate-50">
+        <tr>
+          <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Poste</th>
+          <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Restaurant</th>
+          <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Début</th>
+          <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Fin</th>
+        </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-200">
+        <tr th:each="affectation : ${collaborateur.historiqueAffectations}">
+          <td class="px-6 py-4 text-sm font-medium text-slate-800" th:text="${affectation.fonctionIntitule}">—</td>
+          <td class="px-6 py-4 text-sm text-slate-600" th:text="${affectation.restaurantNom}">—</td>
+          <td class="px-6 py-4 text-sm text-slate-600"
+              th:text="${affectation.dateDebut != null ? #temporals.format(affectation.dateDebut, 'dd/MM/yyyy') : '—'}">—</td>
+          <td class="px-6 py-4 text-sm text-slate-600"
+              th:text="${affectation.dateFin != null ? #temporals.format(affectation.dateFin, 'dd/MM/yyyy') : '—'}">—</td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(collaborateur.historiqueAffectations)}">
+          <td colspan="4" class="px-6 py-6 text-center text-sm text-slate-500">Aucune affectation terminée.</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+</body>
+</html>
