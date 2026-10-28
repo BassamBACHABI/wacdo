@@ -49,7 +49,7 @@ Après avoir démarré MySQL avec la commande de l'étape 1, construire l'image 
 cp .env.example .env
 # Modifier SPRING_DATASOURCE_PASSWORD dans .env avec le mot de passe de la base
 docker build -t wacdo .
-docker run --rm --name wacdo-app --env-file .env -p 8080:8080 wacdo
+docker run --rm --name wacdo-app --env-file .env -e PORT=8080 -p 8080:8080 wacdo
 ```
 
 L'application est alors disponible sur http://localhost:8080. Pour un déploiement sur un serveur, remplacer l'hôte `host.docker.internal` par le nom d'hôte ou l'adresse de la base de données accessible depuis le conteneur. Le fichier `.env` contient les identifiants et n'est pas suivi par Git.

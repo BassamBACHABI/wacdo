@@ -16,5 +16,5 @@ RUN groupadd --system app && useradd --system --gid app app
 COPY --from=build --chown=app:app /workspace/target/wacdo-*.jar /app/app.jar
 
 USER app
-EXPOSE 8080
+EXPOSE 80
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
