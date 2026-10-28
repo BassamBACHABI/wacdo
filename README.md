@@ -41,8 +41,23 @@ Services démarrés :
 
 L'application est disponible sur http://localhost:8080.
 
+### Lancer l'application avec Docker
+
+Après avoir démarré MySQL avec la commande de l'étape 1, construire l'image puis lancer l'application :
+
+```bash
+cp .env.example .env
+# Modifier SPRING_DATASOURCE_PASSWORD dans .env avec le mot de passe de la base
+docker build -t wacdo .
+docker run --rm --name wacdo-app --env-file .env -p 8080:8080 wacdo
+```
+
+L'application est alors disponible sur http://localhost:8080. Pour un déploiement sur un serveur, remplacer l'hôte `host.docker.internal` par le nom d'hôte ou l'adresse de la base de données accessible depuis le conteneur. Le fichier `.env` contient les identifiants et n'est pas suivi par Git.
+
 ### 3. Lancer les tests
 
 ```bash
 ./mvnw test
 ```
+
+Les tests utilisent automatiquement le profil `test` et une base H2 en mémoire. Ils ne nécessitent pas de démarrer MySQL et n'utilisent pas les données de démonstration du profil `dev`.

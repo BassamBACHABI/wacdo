@@ -1,0 +1,7 @@
+.git
+.idea
+.codex
+.claude
+target
+*.iml
+.mcp.json
